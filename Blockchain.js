@@ -108,7 +108,7 @@ module.exports = class Blockchain{
   }
 
   getBlock(blockHeight){
-		return new Promise((resovle, reject) => {
+		return new Promise((resolve, reject) => {
 			getLevelDBData(blockHeight).then((data) => {
 				resolve(data);
 			}).catch((err) => {

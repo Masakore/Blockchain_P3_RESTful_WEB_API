@@ -1,8 +1,8 @@
 # Blockchain_P3_RESTful_WEB_API
-Simple RESTful API using a Node.js framework that will interfaces with the private blockchain.
+Simple RESTful API using a Express.js framework that will interfaces with the private blockchain.
 
 ## Usage
-1. Download node.js
+1. Run command -> $npm install
 2. Run command -> $node index.js
 
 ## API

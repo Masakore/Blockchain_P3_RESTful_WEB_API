@@ -7,6 +7,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
+const blockChain = new Blockchain()
 
 app.get('/block/:blockId', (req, res) => {
   let blockId = parseInt(req.params.blockId)
@@ -14,34 +15,36 @@ app.get('/block/:blockId', (req, res) => {
     return res.status(422).json({ error: "Block Id must be numeric number"})
   }
 
-  let blockChain = new Blockchain()
-
   blockChain.getBlock(req.params.blockId).then((data) => {
-    return res.send(data)
+    res.status(200).json(JSON.parse(data))
+    // res.send(data)
   }).catch((err) => {
-    return res.send("Block Id Not Found")
+    return res.status(422).json({ error: "Block Id Not Found"})
   });
 })
 
 app.post('/block', (req, res) => {
-  if (!req.body.block_data) {
-    return res.status(422).json({ error: "Please set valid key"})
+  if (Object.keys(req.body).length === 0) {
+    return res.status(422).json({ error: "Please set http request body"})
+  }
+  
+  if (!req.body.body) {
+    return res.status(422).json({ error: "Please set data in http body"})
   }
 
-  let blockChain = new Blockchain()
-  let block = new Block(req.body.block_data)
-
+  let block = new Block(req.body.body)
   blockChain.addBlock(block).then((data) => {
     blockChain.getBlock(data)
       .then((block) => {
-          res.send(JSON.parse(block))
+          res.status(200).json(JSON.parse(block))
+          // res.send(JSON.parse(block))
         }
       ).catch((err) => {
-          res.send(new Error(err))
+        return res.status(422).json({ error: err })
       })
     }
   ).catch((err) => {
-      res.send(new Error(err))
+    return res.status(422).json({ error: err })
   })
 })
 
