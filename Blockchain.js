@@ -25,7 +25,7 @@ function loadDataFromLevelDB () {
 	});
 };
 
-function addLevelDBData(key,value){
+function addLevelDBData(key,value) {
   return new Promise(function(resolve, reject){
 		db.put(key, value, function(err) {
 	    if(err){
@@ -33,6 +33,17 @@ function addLevelDBData(key,value){
 			}
 			resolve(key)
 	  });
+	});
+}
+
+function getLevelDBData(key) {
+	return new Promise(function(resolve, reject) {
+		db.get(key, function(err, value) {
+		  if(err)	{
+				reject(err);
+			}
+			resolve(value);
+		});
 	});
 }
 
@@ -87,17 +98,23 @@ module.exports = class Blockchain{
   }
 
   async getBlockHeight(){
-		let data = await loadDataFromLevelDB()
-		this.chain = data;
-    return this.chain.length-1;
+		try {
+		  let data = await loadDataFromLevelDB()
+		  this.chain = data;
+      return this.chain.length-1;
+		} catch(err) {
+			console.error(err);
+		}
   }
 
-  async getBlock(blockHeight){
-		let data = await loadDataFromLevelDB();
-		if (data) {
-	    this.chain = data;
-		  return this.chain[blockHeight].value;
-		}
+  getBlock(blockHeight){
+		return new Promise((resovle, reject) => {
+			getLevelDBData(blockHeight).then((data) => {
+				resolve(data);
+			}).catch((err) => {
+				reject(err);
+			});
+		});
   }
 
   validateBlock(blockHeight){
@@ -149,17 +166,3 @@ module.exports = class Blockchain{
     }
   }
 }
-
-var blockchain = new module.exports();
-//create test data set
-// (function theLoop (i) {
-//   setTimeout(function () {
-//     let blockTest = new Block("Test Block - " + (i + 1));
-// 		let blockChainTest = blockchain;
-//     blockChainTest.addBlock(blockTest).then((result) => {
-//       console.log(result);
-//       i++;
-//       if (i < 10) theLoop(i);
-//     });
-//   }, 5000);
-// })(0);

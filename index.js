@@ -9,17 +9,25 @@ app.use(bodyParser.json())
 
 
 app.get('/block/:blockId', (req, res) => {
+  let blockId = parseInt(req.params.blockId)
+  if (isNaN(blockId)) {
+    return res.status(422).json({ error: "Block Id must be numeric number"})
+  }
+
   let blockChain = new Blockchain()
-  blockChain.getBlock(req.params.blockId)
-    .then((data) => {
-        res.send(data)
-      }
-    ).catch((err) => {
-        res.send(new Error(err))
-    })
+
+  blockChain.getBlock(req.params.blockId).then((data) => {
+    return res.send(data)
+  }).catch((err) => {
+    return res.send("Block Id Not Found")
+  });
 })
 
 app.post('/block', (req, res) => {
+  if (!req.body.block_data) {
+    return res.status(422).json({ error: "Please set valid key"})
+  }
+
   let blockChain = new Blockchain()
   let block = new Block(req.body.block_data)
 
