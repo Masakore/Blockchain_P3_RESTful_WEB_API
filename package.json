@@ -1,0 +1,25 @@
+{
+  "name": "blockchain_p3_restful_web_api",
+  "version": "1.0.0",
+  "description": "Udacity P3 build web API using Express.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Masakore/Blockchain_P3_RESTful_WEB_API.git"
+  },
+  "author": "Masayuki Osuka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Masakore/Blockchain_P3_RESTful_WEB_API/issues"
+  },
+  "homepage": "https://github.com/Masakore/Blockchain_P3_RESTful_WEB_API#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.16.4",
+    "level": "^4.0.0"
+  }
+}
